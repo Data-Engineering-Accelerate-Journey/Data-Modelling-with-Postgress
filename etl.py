@@ -25,7 +25,7 @@ def process_song_file(cur, filepath):
     # insert song record
     song_data = df[['song_id', 'artist_id', 'title', 'year',
                     'duration']].values
-    print("Song data is: ", song_data[0].tolist())
+    #print("Song data is: ", song_data[0].tolist())
     cur.execute(song_table_insert, song_data[0].tolist())
     
     # insert artist record
@@ -78,12 +78,14 @@ def process_log_file(cur, filepath):
     for index, row in df.iterrows():
         
         # get songid and artistid from song and artist tables
-        #print(song_select)
-        #print("Find song, artist, length: <",row.song,"> <",row.artist,"> <",row.length,">")
-        cur.execute(song_select, (row.song, row.artist, row.length))
-        #print(songtitle_select, row.song)
-        #cur.execute(songtitle_select, (row.song,))
-        results = cur.fetchone()
+        # print(song_select)
+        # print("Find song, artist, length: <",row.song,"> <",row.artist,"> <",row.length,">")
+        try:
+            cur.execute(song_select, (row.song, row.artist, row.length))
+            results = cur.fetchone()
+        except Exception as err:
+            results=False
+            #print (err.pgerror)
         
         if results:
             #print("Found it!, song_id = ", song_id, " artist_id = ", artist_id)
@@ -97,7 +99,12 @@ def process_log_file(cur, filepath):
         songplay_data = (pd.to_datetime(row.ts), row.userId, songid, artistid, row.level,
                          row.sessionId, row.location, row.userAgent)
         #print("Songplay Data is: ", songplay_data)
-        cur.execute(songplay_table_insert, songplay_data)
+        try:
+            cur.execute(songplay_table_insert, songplay_data)
+        except:
+            #print("Tried to insert record with failing constraints (NULL)")
+            continue
+                
 
 
 def process_data(cur, conn, filepath, func):
