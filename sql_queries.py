@@ -12,12 +12,12 @@ time_table_drop = "DROP TABLE IF EXISTS time_table;"
 songplay_table_create = ("""
 CREATE TABLE IF NOT EXISTS songplay_table(
    songplay_id SERIAL PRIMARY KEY,
-   start_time TIMESTAMP,
-   user_id VARCHAR,
-   song_id VARCHAR,
-   artist_id VARCHAR,
-   level VARCHAR,
-   session_id INT,
+   start_time TIMESTAMP NOT NULL,
+   user_id VARCHAR NOT NULL,
+   song_id VARCHAR NOT NULL,
+   artist_id VARCHAR NOT NULL,
+   level VARCHAR NOT NULL,
+   session_id INT NOT NULL,
    location VARCHAR,
    user_agent VARCHAR
 );
@@ -27,20 +27,20 @@ CREATE TABLE IF NOT EXISTS songplay_table(
 user_table_create = ("""
 CREATE TABLE IF NOT EXISTS user_table(
    user_id VARCHAR PRIMARY KEY,
-   first_name VARCHAR,
-   last_name VARCHAR,
-   gender VARCHAR,
-   level VARCHAR
+   first_name VARCHAR NOT NULL,
+   last_name VARCHAR NOT NULL,
+   gender VARCHAR NOT NULL,
+   level VARCHAR NOT NULL
 );
 """)
 
 song_table_create = ("""
 CREATE TABLE IF NOT EXISTS song_table(
    song_id VARCHAR PRIMARY KEY,
-   artist_id VARCHAR,
-   title VARCHAR,
-   year INT,
-   duration NUMERIC(7,3)
+   artist_id VARCHAR NOT NULL,
+   title VARCHAR NOT NULL,
+   year INT NOT NULL,
+   duration NUMERIC(7,3) NOT NULL
 );
 """)
 
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS song_table(
 artist_table_create = ("""
 CREATE TABLE IF NOT EXISTS artist_table(
    artist_id VARCHAR PRIMARY KEY,
-   artist_name VARCHAR,
+   artist_name VARCHAR NOT NULL,
    location VARCHAR,
    latitude NUMERIC(9,5),
    longitude NUMERIC(9,5)
